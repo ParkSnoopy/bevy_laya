@@ -8,8 +8,7 @@ use bevy::{
     prelude::*,
     tasks::{AsyncComputeTaskPool, Task, futures::check_ready},
 };
-
-pub use laya_rs as laya;
+pub use burn_laya as laya;
 
 /// Runs requests sequentially on Bevy's asynchronous compute pool.
 ///

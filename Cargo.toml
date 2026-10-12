@@ -1,12 +1,12 @@
 [package]
-name = "bevy_laya"
+name = "bevy-laya"
 version = "0.1.0"
 edition = "2024"
 
 [dependencies]
 anyhow = "1"
 bevy = { version = "0.19", default-features = false, features = ["std", "multi_threaded"] }
-laya-rs = { git = "https://github.com/ParkSnoopy/laya-rs" }
+burn-laya = { git = "https://github.com/ParkSnoopy/burn-laya", version = "0.1" }
 
 # ============================================
 # RUST-MAGIC-LINTER (standard preset)
