@@ -8,55 +8,6 @@ anyhow = "1"
 bevy = { version = "0.19", default-features = false, features = ["std", "multi_threaded"] }
 burn-laya = { git = "https://github.com/ParkSnoopy/burn-laya", version = "0.1" }
 
-# ============================================
-# RUST-MAGIC-LINTER (standard preset)
-# https://github.com/vicnaum/rust-magic-linter
-# ============================================
-# ============================================
-# STANDARD PRESET
-# ============================================
-# The viral tweet config enhanced with async safety
-# Recommended for most projects
-#
-# Based on @notnotstorm's tweet + OpenAgentsInc additions
-
-[lints.clippy]
-# Enable pedantic group for comprehensive checks
-pedantic = { level = "warn", priority = -1 }
-
-# === THE GUARDRAILS (Critical for AI Agents) ===
-# Panic safety - agents must handle errors, not crash
-unwrap_used = "deny"
-expect_used = "deny"
-panic = "deny"
-panic_in_result_fn = "deny"
-
-# The "no cheating" rule
-allow_attributes = "deny"
-
-# Code hygiene - no debug leftovers
-dbg_macro = "deny"
-todo = "deny"
-unimplemented = "deny"
-print_stdout = "deny"
-print_stderr = "deny"
-
-# === ASYNC SAFETY ===
-await_holding_lock = "deny"       # Prevents deadlocks
-
-# === PROCESS SAFETY ===
-exit = "deny"                     # Libraries shouldn't exit
-
-# === PEDANTIC RELAXATIONS ===
-# These are too noisy for most projects
-missing_errors_doc = "allow"
-missing_panics_doc = "allow"
-doc_markdown = "allow"
-must_use_candidate = "allow"
-module_name_repetitions = "allow"
-similar_names = "allow"
-too_many_lines = "allow"
-
 [dev-dependencies]
 burn = { version = "0.22", default-features = false, features = ["std", "flex"] }
 serde_json = "1"
@@ -64,3 +15,83 @@ serde_json = "1"
 # Flex tensor kernels need optimization for checkpoint inference tests.
 [profile.test]
 opt-level = 3
+
+
+# ============================================
+# RUST-MAGIC-LINTER (maximum preset)
+# https://github.com/vicnaum/rust-magic-linter
+# ============================================
+# ============================================
+# MAXIMUM PRESET
+# ============================================
+# Everything at deny level - Tenex-style maximum strictness
+# Use this for critical infrastructure or when you want maximum safety
+#
+# WARNING: This is very strict and may require significant code changes
+
+[lints.rust]
+# Safety - forbid means even #![allow(...)] can't override
+unsafe_code = "forbid"
+non_ascii_idents = "forbid"
+
+# Quality enforcement
+warnings = "deny"
+rust_2018_idioms = { level = "deny", priority = -1 }
+future_incompatible = { level = "deny", priority = -1 }
+nonstandard_style = { level = "deny", priority = -1 }
+
+# Documentation enforcement
+missing_docs = "deny"
+missing_debug_implementations = "deny"
+missing_copy_implementations = "deny"
+unfulfilled_lint_expectations = "deny"
+
+[lints.rustdoc]
+all = { level = "deny", priority = -1 }
+
+[lints.clippy]
+# === ALL LINT GROUPS AT DENY ===
+all = { level = "deny", priority = -1 }
+pedantic = { level = "deny", priority = -1 }
+nursery = { level = "deny", priority = -1 }
+cargo = { level = "deny", priority = -1 }
+
+# === THE GUARDRAILS ===
+unwrap_used = "deny"
+expect_used = "deny"
+panic = "deny"
+panic_in_result_fn = "deny"
+allow_attributes = "deny"
+allow_attributes_without_reason = "deny"
+
+# Code hygiene
+dbg_macro = "deny"
+todo = "deny"
+unimplemented = "deny"
+print_stdout = "deny"
+print_stderr = "deny"
+
+# === ASYNC SAFETY ===
+await_holding_lock = "deny"
+large_futures = "deny"
+
+# === PROCESS/MEMORY SAFETY ===
+exit = "deny"
+mem_forget = "deny"
+
+# === PERFORMANCE ===
+large_stack_arrays = "deny"
+large_types_passed_by_value = "deny"
+
+# === MINIMAL RELAXATIONS ===
+# Only the absolutely necessary ones
+multiple_crate_versions = "allow"   # Unavoidable with transitive deps
+
+# Cast lints - too many false positives even for strict projects
+cast_possible_truncation = "allow"
+cast_sign_loss = "allow"
+cast_precision_loss = "allow"
+cast_possible_wrap = "allow"
+
+# Nursery lints that have too many false positives
+cognitive_complexity = "allow"      # Use clippy.toml threshold instead
