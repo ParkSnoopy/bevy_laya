@@ -13,7 +13,7 @@ keywords        = ["bevy", "laya", "inference", "machine-learning"]
 [dependencies]
 anyhow          = "1"
 bevy            = { version = "0.19", default-features = false, features = ["std", "multi_threaded"] }
-burn-laya       = { git = "https://github.com/ParkSnoopy/burn-laya", version = "0.1" }
+burn-laya       = "0.1"
 
 [dev-dependencies]
 burn            = { version = "0.22", default-features = false, features = ["std", "flex"] }
