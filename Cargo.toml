@@ -1,7 +1,12 @@
 [package]
 name = "bevy-laya"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
+description = "Asynchronous Laya inference for Bevy"
+license = "GPL-3.0-only"
+repository = "https://github.com/ParkSnoopy/bevy_laya"
+keywords = ["bevy", "laya", "inference", "machine-learning"]
+categories = ["game-development", "science"]
 
 [dependencies]
 anyhow = "1"

@@ -11,6 +11,45 @@ Bevy uses no default features. The adapter needs no window or renderer.
 - `LayaResponse { id, result }` returns that identifier and the original `anyhow::Result<laya::Prediction>`.
 - `LayaSet` orders producers and consumers within `Update`. Put producers before this set and consumers after it.
 
+## Examples
+
+Run these examples from the repository root after [checkpoint preparation](#checkpoint-and-validation-boundary).
+Release builds optimize the CPU tensor kernels.
+Cargo supplies the configured `LAYA_MODEL_DIR` to each example. An explicit environment value selects another prepared checkpoint.
+
+| Example | Demonstrates |
+| --- | --- |
+| [headless](examples/headless.rs) | Read JSON from standard input, submit an owned request, and receive a complete prediction. |
+| [typed_questions](examples/typed_questions.rs) | Construct ordered choice, score, and noul questions through the Rust API. |
+| [ecs_decision](examples/ecs_decision.rs) | Submit from an ECS system before `LayaSet`, then update entity components from responses after it. |
+| [queue_recovery](examples/queue_recovery.rs) | Preserve FIFO order across valid, invalid, and valid requests without stopping after a failure. |
+
+```bash
+cargo run --release --locked --example headless <<'JSON'
+{
+  "state": "An invoice charged us twice for the same purchase.",
+  "questions": {
+    "department": {
+      "type": "choice",
+      "instructions": "Which department should handle this?",
+      "criteria": {"billing": "invoices, payments, refunds", "technical": "bugs, outages"}
+    }
+  }
+}
+JSON
+
+cargo run --release --locked --example typed_questions
+cargo run --release --locked --example ecs_decision
+cargo run --release --locked --example queue_recovery
+```
+
+Each example runs without a window and stops after receiving its expected responses.
+The [shared helpers](examples/common/mod.rs) load the CPU agent, poll with a deadline, and write complete predictions as JSON lines.
+The ECS example also prints the resulting component values. Its entity-based request identifiers are valid only within the current world.
+The queue example reports the expected rejected request on standard error and still completes successfully.
+Other loading, inference, timeout, or output failures return an error.
+The examples do not establish confidence calibration or gameplay accuracy.
+
 ## Execution contract
 
 The plugin drains request messages into a FIFO queue on each update.

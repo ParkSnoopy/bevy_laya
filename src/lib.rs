@@ -21,6 +21,7 @@ pub struct LayaPlugin {
 
 impl LayaPlugin {
     /// Use a loaded agent without copying its model weights.
+    #[must_use]
     pub fn new(agent: laya::Agent) -> Self {
         Self {
             agent: Arc::new(agent),
@@ -74,9 +75,9 @@ struct Worker {
 }
 
 fn infer(
-    mut requests: ResMut<Messages<LayaRequest>>,
-    mut worker: ResMut<Worker>,
-    mut responses: MessageWriter<LayaResponse>,
+    mut requests: ResMut<'_, Messages<LayaRequest>>,
+    mut worker: ResMut<'_, Worker>,
+    mut responses: MessageWriter<'_, LayaResponse>,
 ) {
     worker.pending.extend(requests.drain());
     if let Some(response) = worker.task.as_mut().and_then(check_ready) {

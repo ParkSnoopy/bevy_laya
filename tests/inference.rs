@@ -33,10 +33,13 @@ const REQUEST: &str = r#"{
 
 const EMPTY_REQUEST: &str = r#"{"state":"","questions":{}}"#;
 
-#[derive(Default, Resource)]
+#[derive(Debug, Default, Resource)]
 struct Responses(Vec<(u64, Result<Value, String>)>);
 
-fn collect(mut messages: MessageReader<LayaResponse>, mut responses: ResMut<Responses>) {
+fn collect(
+    mut messages: MessageReader<'_, '_, LayaResponse>,
+    mut responses: ResMut<'_, Responses>,
+) {
     for response in messages.read() {
         let result = response
             .result
