@@ -1,4 +1,4 @@
-# Bevy laya
+# bevy_laya
 
 A Bevy 0.19 adapter for the Git dependency [burn-laya](https://github.com/ParkSnoopy/burn-laya).
 Bevy uses no default features. The adapter needs no window or renderer.

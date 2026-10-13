@@ -618,17 +618,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "bevy-laya"
-version = "0.1.1"
-dependencies = [
- "anyhow",
- "bevy",
- "burn",
- "burn-laya",
- "serde_json",
-]
-
-[[package]]
 name = "bevy_a11y"
 version = "0.19.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -946,6 +935,17 @@ dependencies = [
  "bevy_transform",
  "bevy_utils",
  "bevy_window",
+]
+
+[[package]]
+name = "bevy_laya"
+version = "0.1.1"
+dependencies = [
+ "anyhow",
+ "bevy",
+ "burn",
+ "burn-laya",
+ "serde_json",
 ]
 
 [[package]]
