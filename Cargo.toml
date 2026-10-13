@@ -1,12 +1,14 @@
 [package]
-name = "bevy-laya"
-version = "0.1.1"
-edition = "2024"
-description = "Asynchronous Laya inference for Bevy"
-license = "GPL-3.0-only"
-repository = "https://github.com/ParkSnoopy/bevy_laya"
-keywords = ["bevy", "laya", "inference", "machine-learning"]
-categories = ["game-development", "science"]
+name            = "bevy-laya"
+version         = "0.1.1"
+edition         = "2024"
+license         = "GPL-3.0-only"
+authors         = ["ParkSnoopy <117149837+ParkSnoopy@users.noreply.github.com>"]
+description     = "Asynchronous Laya inference for Bevy"
+repository      = "https://github.com/ParkSnoopy/bevy_laya"
+documentation   = "https://docs.rs/bevy-laya"
+categories      = ["game-development", "science"]
+keywords        = ["bevy", "laya", "inference", "machine-learning"]
 
 [dependencies]
 anyhow = "1"
