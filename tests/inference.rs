@@ -1,11 +1,8 @@
 //! Exercise the message adapter with a complete local checkpoint.
 
-use std::{
-    path::PathBuf,
-    time::{Duration, Instant},
-};
+use std::time::{Duration, Instant};
 
-use anyhow::{Context, Result, ensure};
+use anyhow::{Result, ensure};
 use bevy::prelude::*;
 use bevy_laya::{LayaPlugin, LayaRequest, LayaResponse, LayaSet, laya};
 use burn::tensor::Device;
@@ -54,11 +51,7 @@ fn collect(
 
 #[test]
 fn queued_requests_preserve_predictions_and_errors() -> Result<()> {
-    let directory = PathBuf::from(Context::context(
-        std::env::var_os("LAYA_MODEL_DIR"),
-        "Set LAYA_MODEL_DIR to a prepared checkpoint directory",
-    )?);
-    let agent = laya::Agent::load(&directory, &Device::flex())?;
+    let agent = laya::Agent::load(&bevy_laya::model_dir(), &Device::flex())?;
     let request: laya::Request = serde_json::from_str(REQUEST)?;
     let expected = serde_json::to_value(agent.predict(&request)?)?;
 

@@ -6,6 +6,7 @@ Bevy uses no default features. The adapter needs no window or renderer.
 ## Interfaces
 
 - `laya` re-exports the dependency's public API.
+- `model_dir()` returns the checkpoint directory prepared by `build.rs`, or the runtime `LAYA_MODEL_DIR` override.
 - `LayaPlugin::new(agent)` accepts a loaded `laya::Agent`. The caller selects the checkpoint and compute device.
 - `LayaRequest { id, request }` carries a caller-selected `u64` identifier and an owned `laya::Request`.
 - `LayaResponse { id, result }` returns that identifier and the original `anyhow::Result<laya::Prediction>`.
@@ -13,9 +14,9 @@ Bevy uses no default features. The adapter needs no window or renderer.
 
 ## Examples
 
-Run these examples from the repository root after [checkpoint preparation](#checkpoint-and-validation-boundary).
+Run these examples from the repository root.
+The build script downloads and converts the pinned checkpoint automatically on the first build.
 Release builds optimize the CPU tensor kernels.
-Cargo supplies the configured `LAYA_MODEL_DIR` to each example. An explicit environment value selects another prepared checkpoint.
 
 | Example | Demonstrates |
 | --- | --- |
@@ -70,26 +71,20 @@ Dropping the handle cannot interrupt a synchronous model call that already start
 
 ## Checkpoint and validation boundary
 
-The dependency bundles generated Burn source. Normal compilation needs no model files or Python.
-[Cargo configuration](.cargo/config.toml) defaults `LAYA_MODEL_DIR` to this repository's `models/laya` directory.
-An explicit environment value overrides that default.
-The directory is local to this project and does not require a sibling checkout.
-Runtime loading needs `laya.bpk`, configuration, and tokenizer files.
-ONNX conversion is a separate upstream preparation step with the optional `prepare` feature.
-That step needs `laya.onnx`, its external tensor data, and `encoder/config.json`.
-See the dependency's [architecture document](https://github.com/ParkSnoopy/burn-laya/blob/main/docs/ARCHITECTURE.md) for artifact preparation and supported devices.
+`build.rs` downloads and prepares the pinned checkpoint into the user cache directory (`$XDG_CACHE_HOME/bevy_laya/<revision>`, `$HOME/.cache/bevy_laya/<revision>`, `$LOCALAPPDATA/bevy_laya/<revision>`, or `OUT_DIR/laya`).
+The build script invokes `uv` to fetch the pinned files, verify the weight digest, and export ONNX, then converts and validates `laya.bpk` with `burn-laya`'s `prepare` feature.
+Prepared artifacts stay outside the repository and are reused across builds.
+Set `LAYA_MODEL_DIR` at build time or runtime to select another prepared checkpoint directory.
+Runtime loading needs `laya.bpk`, `rl_agent_config.json`, and `tokenizer/`.
+See the dependency's [architecture document](https://github.com/ParkSnoopy/burn-laya/blob/main/docs/ARCHITECTURE.md) for artifact details and supported devices.
 Checkpoint loading can warn about temperature adjustment. Treat affected confidence values as uncalibrated.
 
 The base checkpoint is [convaiinnovations/laya at revision 1c5edc17a7acd8701df6fc341c0d179f1c62c982](https://huggingface.co/convaiinnovations/laya/tree/1c5edc17a7acd8701df6fc341c0d179f1c62c982).
 Its `model.safetensors` SHA-256 is `891102d372688fc2a094dac56a384bc537b87c63f21f9f3dac0be2b7cbc8d86c`.
-Preparation verifies that digest, exports ONNX with published `laya==0.4.6`, and checks the export against PyTorch.
-Model artifacts remain ignored. Inference and its integration test need a prepared checkpoint.
-Cargo does not load a dependency's `.cargo/config.toml` in a consuming project.
-Downstream applications select their prepared checkpoint directory when loading an agent.
+The build script verifies that digest, exports ONNX with published `laya==0.4.6`, and validates the generated Burn graph against `burn-laya`.
 
-Run `cargo test` from this repository after preparation.
-The integration test uses the real CPU checkpoint, not initialized or mock weights.
+Run `cargo test` from this repository.
+The integration test uses the real CPU checkpoint prepared by `build.rs`, not initialized or mock weights.
 It compares every serialized prediction field with direct inference on the same agent.
 It also checks FIFO order, request identifiers, error propagation, and recovery after failure.
-The test fails if required artifacts are absent.
 The optimized test profile makes Flex tensor kernels practical.

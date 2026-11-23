@@ -2,25 +2,20 @@
 
 use std::{
     io::Write,
-    path::PathBuf,
     time::{Duration, Instant},
 };
 
-use anyhow::{Context, Result, ensure};
+use anyhow::{Result, ensure};
 use bevy::prelude::*;
 use bevy_laya::{LayaResponse, laya};
 use burn::tensor::Device;
 
-/// Load the checkpoint selected by Cargo configuration or the environment.
+/// Load the build-prepared checkpoint or the runtime `LAYA_MODEL_DIR` override.
 ///
 /// # Errors
 /// Returns an error for a missing directory or incompatible checkpoint assets.
 pub fn load_agent() -> Result<laya::Agent> {
-    let directory = PathBuf::from(Context::context(
-        std::env::var_os("LAYA_MODEL_DIR"),
-        "LAYA_MODEL_DIR needs a prepared checkpoint",
-    )?);
-    laya::Agent::load(&directory, &Device::flex())
+    laya::Agent::load(&bevy_laya::model_dir(), &Device::flex())
 }
 
 /// Update a headless app until the requested responses arrive.

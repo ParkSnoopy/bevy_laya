@@ -15,6 +15,10 @@ anyhow          = "1"
 bevy            = { version = "0.20", default-features = false, features = ["std", "multi_threaded"] }
 burn-laya       = "0.1"
 
+[build-dependencies]
+anyhow          = "1"
+burn-laya       = { version = "0.1", features = ["prepare"] }
+
 [dev-dependencies]
 burn            = { version = "0.22", default-features = false, features = ["std", "flex"] }
 serde_json      = "1"

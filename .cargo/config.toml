@@ -1,2 +1,0 @@
-[env]
-LAYA_MODEL_DIR = { value = "models/laya", relative = true }

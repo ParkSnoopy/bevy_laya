@@ -1,6 +1,6 @@
 //! Asynchronous Laya inference for Bevy 0.20.
 
-use std::{collections::VecDeque, sync::Arc};
+use std::{collections::VecDeque, path::PathBuf, sync::Arc};
 
 use anyhow::Result;
 use bevy::{
@@ -9,6 +9,16 @@ use bevy::{
     tasks::{AsyncComputeTaskPool, Task, futures::check_ready},
 };
 pub use burn_laya as laya;
+
+/// Prepared checkpoint directory populated during the build.
+///
+/// Set `LAYA_MODEL_DIR` at runtime to override the build-prepared directory.
+#[must_use]
+pub fn model_dir() -> PathBuf {
+    std::env::var_os("LAYA_MODEL_DIR")
+        .filter(|value| !value.is_empty())
+        .map_or_else(|| PathBuf::from(env!("LAYA_MODEL_DIR")), PathBuf::from)
+}
 
 /// Runs requests sequentially on Bevy's asynchronous compute pool.
 ///
