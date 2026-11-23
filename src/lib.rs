@@ -1,4 +1,4 @@
-//! Asynchronous Laya inference for Bevy 0.19.
+//! Asynchronous Laya inference for Bevy 0.20.
 
 use std::{collections::VecDeque, sync::Arc};
 

@@ -1,6 +1,6 @@
 # bevy_laya
 
-A Bevy 0.19 adapter for [burn-laya](https://crates.io/crates/burn-laya).
+A Bevy 0.20 adapter for [burn-laya](https://crates.io/crates/burn-laya).
 Bevy uses no default features. The adapter needs no window or renderer.
 
 ## Interfaces

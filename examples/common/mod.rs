@@ -16,9 +16,10 @@ use burn::tensor::Device;
 /// # Errors
 /// Returns an error for a missing directory or incompatible checkpoint assets.
 pub fn load_agent() -> Result<laya::Agent> {
-    let directory = PathBuf::from(
-        std::env::var_os("LAYA_MODEL_DIR").context("LAYA_MODEL_DIR needs a prepared checkpoint")?,
-    );
+    let directory = PathBuf::from(Context::context(
+        std::env::var_os("LAYA_MODEL_DIR"),
+        "LAYA_MODEL_DIR needs a prepared checkpoint",
+    )?);
     laya::Agent::load(&directory, &Device::flex())
 }
 

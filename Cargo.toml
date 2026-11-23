@@ -1,6 +1,6 @@
 [package]
 name            = "bevy_laya"
-version         = "0.1.1"
+version         = "0.2.0"
 edition         = "2024"
 license         = "GPL-3.0-only"
 authors         = ["ParkSnoopy <117149837+ParkSnoopy@users.noreply.github.com>"]
@@ -12,7 +12,7 @@ keywords        = ["bevy", "laya", "inference", "machine-learning"]
 
 [dependencies]
 anyhow          = "1"
-bevy            = { version = "0.19", default-features = false, features = ["std", "multi_threaded"] }
+bevy            = { version = "0.20", default-features = false, features = ["std", "multi_threaded"] }
 burn-laya       = "0.1"
 
 [dev-dependencies]

@@ -54,10 +54,10 @@ fn collect(
 
 #[test]
 fn queued_requests_preserve_predictions_and_errors() -> Result<()> {
-    let directory = PathBuf::from(
-        std::env::var_os("LAYA_MODEL_DIR")
-            .context("Set LAYA_MODEL_DIR to a prepared checkpoint directory")?,
-    );
+    let directory = PathBuf::from(Context::context(
+        std::env::var_os("LAYA_MODEL_DIR"),
+        "Set LAYA_MODEL_DIR to a prepared checkpoint directory",
+    )?);
     let agent = laya::Agent::load(&directory, &Device::flex())?;
     let request: laya::Request = serde_json::from_str(REQUEST)?;
     let expected = serde_json::to_value(agent.predict(&request)?)?;
