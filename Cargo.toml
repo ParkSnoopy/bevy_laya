@@ -2,7 +2,7 @@
 name            = "bevy_laya"
 version         = "0.2.0"
 edition         = "2024"
-license         = "GPL-3.0-only"
+license         = "LGPL-3.0-or-later"
 authors         = ["ParkSnoopy <117149837+ParkSnoopy@users.noreply.github.com>"]
 description     = "Asynchronous Laya inference for Bevy"
 repository      = "https://github.com/ParkSnoopy/bevy_laya"
